@@ -1,0 +1,59 @@
+name: Build P224 VIO-v1
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'configs/**'
+      - 'patches/**'
+      - 'scripts/**'
+      - 'source-lock.json'
+      - '.github/workflows/build-p224.yml'
+permissions:
+  contents: read
+jobs:
+  firmware:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+      - name: Read source lock
+        id: lock
+        run: |
+          echo "sha=$(python3 -c 'import json; print(json.load(open("source-lock.json"))["commit"])')" >> "$GITHUB_OUTPUT"
+      - name: Checkout locked Betaflight source
+        uses: actions/checkout@v5
+        with:
+          repository: betaflight/betaflight
+          ref: ${{ steps.lock.outputs.sha }}
+          path: firmware
+      - name: Prepare and validate inputs
+        run: python3 scripts/prepare.py
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential git curl python3 xz-utils
+          make -C firmware arm_sdk_install
+          make -C firmware arm_sdk_version | tee dist/toolchain.txt
+      - name: Compile HEX and BIN
+        run: |
+          set -o pipefail
+          make -C firmware CONFIG=P224_VIO_V1 BETAFLIGHT_CONFIG="$GITHUB_WORKSPACE" REV=yes hex binary 2>&1 | tee dist/build.log
+      - name: Package and check linked image
+        run: python3 scripts/package.py
+      - name: Upload firmware
+        uses: actions/upload-artifact@v6
+        with:
+          name: P224_VIO_V1-2026.6.2-${{ steps.lock.outputs.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 60
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: P224-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+          retention-days: 14

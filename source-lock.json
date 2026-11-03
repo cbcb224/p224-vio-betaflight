@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/betaflight/betaflight.git",
+  "release": "2026.6.2",
+  "commit": "e0b7bb01b17b21351057e9ead2d1ab39dd44fa16",
+  "upstream_config_commit": "3a406c5c30c20d7c3bc7dd5ed547cca961baf0a9",
+  "board": "P224_VIO_V1",
+  "toolchain": "13.3.Rel1"
+}
