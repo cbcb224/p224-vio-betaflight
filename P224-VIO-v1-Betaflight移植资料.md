@@ -261,3 +261,8 @@ BF 4.5.2 的 `icm426xxSpiGyroDetect()` 将读取函数设置为 `mpuGyroReadSPI(
 本次本地源码确认：无 DRDY 读取分支仍存在；H743 ADC 表包含 PA4/PC4；USB FS 关闭硬件 VBUS sensing；LED 默认低有效，不应额外定义 LEDx_INVERTED。ADC 公式保持一致。原生 H743 Flash 配置区实际位于 0x08020000..0x0803FFFF，不是 PX4 参数区；向量起始 0x08000000，主代码区从 0x08040000 开始。
 
 首版只映射四路电机、默认 DShot300 且双向 OFF，待电调信息与台架确认后启用；CW0_DEG 轴向只是临时测试值。蜂鸣器、SD、I2C外设和额外输出留待后续。完整配置范围及上传方法见 README。
+
+
+## 首次云端构建已通过
+
+2026-11-03 已通过 GitHub 插件提交工程并完成 [Actions #1](https://github.com/cbcb224/p224-vio-betaflight/actions/runs/41585512669)，工程提交 9247ca9002ac955c87541de4379f095bffc66822。HEX/BIN 编译、真实链接布局检查和产物上传均成功；15 个产物文件可在该作业下载。前述“尚未云端编译”记录描述的是准备阶段，以本节为最新状态。实板验证仍未进行。

@@ -1,6 +1,10 @@
 # P224 VIO-v1 Betaflight 首版工程
 
-当前状态：已准备板配置和云端编译流程，尚未运行 GitHub Actions、未上板验证，不能作为已验收飞行固件。
+当前状态：首次 GitHub Actions 云端编译成功，HEX/BIN、链接检查和产物上传已通过；未上板验证，不能作为已验收飞行固件。
+
+仓库：https://github.com/cbcb224/p224-vio-betaflight
+
+首次成功构建：[Actions #1](https://github.com/cbcb224/p224-vio-betaflight/actions/runs/41585512669)，工程提交 `9247ca9002ac955c87541de4379f095bffc66822`。
 
 ## 固定基线
 
@@ -58,7 +62,7 @@ SPI2 无 DRDY 模式不是中断触发 DMA；配置 DMA 资源不等于实际使
 4. 绿色完成后下载该次 Artifact；其中应包含 HEX、BIN、ELF、MAP、构建日志、工具链版本、板配置、链接脚本、manifest 和 SHA256SUMS。失败作业只上传诊断包，不可当作固件使用。
 5. 后续只改板配置即可提交触发新构建。若需改驱动，编辑本地 firmware/ 源码并按 patches/README.md 导出补丁；源码修改不自动上传，必须把补丁提交。
 
-尚未提供远程仓库，因此这一步还没有执行。本地准备检查只验证输入与脚本，不能替代云端编译。
+远程仓库已创建为公开仓库，首次构建已完成。后续本地修改 configs/ 或 scripts/ 后，通过 GitHub 插件提交会自动触发新构建。首次产物保留至 2027-01-02；需要长期留存请下载备份。
 
 ## 首刷地址与恢复
 
